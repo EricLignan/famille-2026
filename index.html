@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joyeux Anniversaire Tonton Jean</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #C8860A;
+            --gold-light: #F5D56E;
+            --green: #4A7C59;
+            --green-light: #A8D5BA;
+            --pink: #E8A0BF;
+            --pink-light: #F9DDE7;
+            --peach: #FDEBD3;
+            --cream: #FFF9F0;
+            --text: #3D2C2E;
+            --text-light: #6B5355;
+            --dark-overlay: rgba(61, 44, 46, 0.8);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* === ECRAN D'ACCUEIL === */
+        #welcome {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            background:
+                radial-gradient(circle at 30% 20%, rgba(232, 160, 191, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(168, 213, 186, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(253, 235, 211, 0.5) 0%, transparent 70%),
+                var(--cream);
+        }
+
+        #welcome h1 {
+            font-family: 'Secular One', sans-serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: var(--green);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(74, 124, 89, 0.15);
+        }
+
+        #welcome .subtitle {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        .btn-start {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-family: 'Secular One', sans-serif;
+            font-size: 1.2rem;
+            color: white;
+            background: linear-gradient(135deg, var(--green), var(--green-light));
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(74, 124, 89, 0.3);
+        }
+
+        .btn-start:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 30px rgba(74, 124, 89, 0.4);
+        }
+
+        .btn-start:active { transform: scale(0.98); }
+
+        /* === GRILLE DE CADEAUX === */
+        #gifts-section {
+            display: none;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(232, 160, 191, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(168, 213, 186, 0.15) 0%, transparent 50%),
+                var(--cream);
+        }
+
+        .counter {
+            text-align: center;
+            font-family: 'Secular One', sans-serif;
+            font-size: 1.1rem;
+            color: var(--green);
+            margin-bottom: 2rem;
+        }
+
+        .gifts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 0.5rem;
+        }
+
+        @media (min-width: 500px) {
+            .gifts-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        /* === CADEAU (boite) === */
+        .gift-box {
+            aspect-ratio: 1;
+            background: white;
+            border: 2px solid var(--pink-light);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .gift-box:hover {
+            transform: translateY(-4px);
+            border-color: var(--pink);
+            box-shadow: 0 8px 25px rgba(232, 160, 191, 0.25);
+        }
+
+        .gift-box.opened {
+            border-color: var(--green-light);
+            background: linear-gradient(145deg, #f0faf4, #e8f5ee);
+            cursor: default;
+        }
+
+        .gift-box.opened:hover { transform: none; }
+
+        .gift-icon {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s;
+        }
+
+        .gift-box:not(.opened):hover .gift-icon {
+            animation: wiggle 0.4s ease-in-out;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .gift-name {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 600;
+            text-align: center;
+            padding: 0 0.5rem;
+        }
+
+        .gift-box.opened .gift-icon { opacity: 0.5; }
+        .gift-box.opened .gift-name { opacity: 0.6; }
+
+        .gift-revealed-name {
+            font-size: 0.85rem;
+            color: var(--green);
+            font-weight: 600;
+            text-align: center;
+            padding: 0 0.5rem;
+        }
+
+        .gift-check {
+            display: none;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background: var(--green);
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            line-height: 24px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .gift-box.opened .gift-check { display: block; }
+
+        /* === MODAL === */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--dark-overlay);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-content {
+            background: white;
+            border: 2px solid var(--pink-light);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            animation: modalIn 0.4s ease-out;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .modal-close:hover { opacity: 1; }
+
+        .modal-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--pink);
+            margin-bottom: 1rem;
+        }
+
+        .modal-name {
+            font-family: 'Secular One', sans-serif;
+            font-size: 1.4rem;
+            color: var(--green);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-placeholder-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pink), var(--green-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 1rem;
+            border: 3px solid var(--gold);
+        }
+
+        /* Audio player custom */
+        .audio-player {
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+
+        .audio-player audio {
+            width: 100%;
+            height: 40px;
+            border-radius: 20px;
+        }
+
+        /* Video */
+        .modal-video {
+            width: 100%;
+            border-radius: 12px;
+            margin: 0.5rem 0;
+        }
+
+        /* === FINALE === */
+        #finale {
+            display: none;
+            min-height: 50vh;
+            text-align: center;
+            padding: 3rem 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        #finale.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #finale h2 {
+            font-family: 'Secular One', sans-serif;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: var(--green);
+            margin-bottom: 1rem;
+        }
+
+        #finale p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 500px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .heart {
+            font-size: 3rem;
+            margin-top: 1.5rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* Motif decoratif */
+        .pattern-border {
+            height: 6px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--pink) 0px, var(--pink) 12px,
+                transparent 12px, transparent 18px,
+                var(--green-light) 18px, var(--green-light) 30px,
+                transparent 30px, transparent 36px
+            );
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Motif haut -->
+<div class="pattern-border"></div>
+
+<!-- ECRAN D'ACCUEIL -->
+<section id="welcome">
+    <h1>Joyeux Anniversaire<br>Tonton Jean !</h1>
+    <p class="subtitle">
+        Ta famille t'a prepare des surprises...<br>
+        Chaque cadeau contient un message rien que pour toi.
+    </p>
+    <button class="btn-start" onclick="startExperience()">
+        Decouvrir mes surprises
+    </button>
+</section>
+
+<!-- GRILLE DE CADEAUX -->
+<section id="gifts-section">
+    <div class="counter" id="counter">0 / 11 surprises decouvertes</div>
+    <div class="gifts-grid" id="gifts-grid"></div>
+    <div id="finale">
+        <h2>Toute ta famille te souhaite<br>un merveilleux anniversaire !</h2>
+        <p>
+            Chaque voix, chaque image, chaque video<br>
+            est un peu d'amour envoye de loin.<br>
+            On t'aime fort, Tonton Jean.
+        </p>
+        <div class="heart">&hearts;</div>
+    </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <div id="modal-avatar"></div>
+        <div class="modal-name" id="modal-name"></div>
+        <div id="modal-media"></div>
+    </div>
+</div>
+
+<!-- canvas-confetti CDN -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<script>
+// === CONFIGURATION DES CADEAUX ===
+const GIFTS = [
+    { id: 1,  name: "Madeleine",    type: "audio", file: "assets/madeleine.mp3",       image: "assets/madeleine.jpeg" },
+    { id: 2,  name: "Roxane",        type: "audio", file: "assets/roxane.mp3",          image: null },
+    { id: 3,  name: "Elissa",        type: "audio", file: "assets/elissa.mp3",          image: "assets/elissa.jpeg" },
+    { id: 4,  name: "Francine",      type: "audio", file: "assets/francine.mp3",        image: null },
+    { id: 5,  name: "Cyril",         type: "audio", file: "assets/cyril.mp3",           image: null },
+    { id: 6,  name: "Eric",          type: "audio", file: "assets/eric.mp3",            image: null },
+    { id: 7,  name: "Junior",        type: "audio", file: "assets/junior.mp3",          image: null },
+    { id: 8,  name: "Blanche",       type: "audio", file: "assets/blanche.mp3",         image: null },
+    { id: 9,  name: "Eug\u00e8ne",   type: "audio", file: "assets/eugene.mp3",          image: null },
+    { id: 10, name: "Sondi et Maman Fran\u00e7oise", type: "video", file: "assets/sondi-francoise.mp4", image: null },
+    { id: 11, name: "Nadine et Tatiana",              type: "video", file: "assets/nadine-tatiana.mp4",  image: null },
+];
+
+const ICONS = ["🎁", "🎀", "🎊", "🎉", "🎈", "🎂", "🎵", "💌", "🌟", "✨", "💛"];
+let openedCount = 0;
+let currentAudio = null;
+
+// === DEMARRAGE ===
+function startExperience() {
+    document.getElementById("welcome").style.display = "none";
+    document.getElementById("gifts-section").style.display = "block";
+    renderGrid();
+    // Petit confetti d'accueil
+    confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+}
+
+// === GRILLE ===
+function renderGrid() {
+    const grid = document.getElementById("gifts-grid");
+    // Melanger l'ordre pour l'effet surprise
+    const shuffled = [...GIFTS].sort(() => Math.random() - 0.5);
+
+    shuffled.forEach((gift, i) => {
+        const box = document.createElement("div");
+        box.className = "gift-box";
+        box.dataset.id = gift.id;
+        box.innerHTML = `
+            <div class="gift-check">&check;</div>
+            <div class="gift-icon">${ICONS[i % ICONS.length]}</div>
+            <div class="gift-name">Surprise ${i + 1}</div>
+            <div class="gift-revealed-name" style="display:none">${gift.name}</div>
+        `;
+        box.addEventListener("click", () => openGift(gift, box));
+        grid.appendChild(box);
+    });
+}
+
+// === OUVERTURE ===
+function openGift(gift, box) {
+    if (box.classList.contains("opened")) {
+        // Re-ouvrir pour re-ecouter
+        showModal(gift);
+        return;
+    }
+
+    box.classList.add("opened");
+    // Reveler le prenom sur la boite
+    box.querySelector(".gift-name").style.display = "none";
+    box.querySelector(".gift-revealed-name").style.display = "block";
+    openedCount++;
+    updateCounter();
+    showModal(gift);
+
+    // Confettis
+    confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#E8A0BF", "#A8D5BA", "#F5D56E", "#FDEBD3"]
+    });
+
+    // Finale ?
+    if (openedCount === GIFTS.length) {
+        setTimeout(showFinale, 1500);
+    }
+}
+
+function updateCounter() {
+    document.getElementById("counter").textContent =
+        `${openedCount} / ${GIFTS.length} surprises decouvertes`;
+}
+
+// === MODAL ===
+function showModal(gift) {
+    // Stop audio precedent
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+    }
+
+    const modal = document.getElementById("modal");
+    const avatarEl = document.getElementById("modal-avatar");
+    const nameEl = document.getElementById("modal-name");
+    const mediaEl = document.getElementById("modal-media");
+
+    // Avatar
+    if (gift.image) {
+        avatarEl.innerHTML = `<img class="modal-image" src="${gift.image}" alt="${gift.name}">`;
+    } else {
+        const initials = gift.name.split(" ").map(w => w[0]).join("").substring(0, 2);
+        avatarEl.innerHTML = `<div class="modal-placeholder-avatar">${initials}</div>`;
+    }
+
+    // Nom
+    nameEl.textContent = gift.name;
+
+    // Media
+    if (gift.type === "audio") {
+        mediaEl.innerHTML = `
+            <div class="audio-player">
+                <audio controls autoplay id="current-audio">
+                    <source src="${gift.file}" type="audio/mpeg">
+                    Ton navigateur ne supporte pas l'audio.
+                </audio>
+            </div>
+        `;
+        currentAudio = document.getElementById("current-audio");
+    } else if (gift.type === "video") {
+        mediaEl.innerHTML = `
+            <video class="modal-video" controls autoplay playsinline id="current-audio">
+                <source src="${gift.file}" type="video/mp4">
+                Ton navigateur ne supporte pas la video.
+            </video>
+        `;
+        currentAudio = document.getElementById("current-audio");
+    }
+
+    modal.classList.add("active");
+}
+
+function closeModal(event) {
+    if (event && event.target !== document.getElementById("modal")) return;
+    const modal = document.getElementById("modal");
+    modal.classList.remove("active");
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+    }
+}
+
+// Fermer avec Echap
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+});
+
+// === FINALE ===
+function showFinale() {
+    const finale = document.getElementById("finale");
+    finale.classList.add("active");
+
+    // Gros confettis de celebration
+    const duration = 3000;
+    const end = Date.now() + duration;
+    (function frame() {
+        confetti({
+            particleCount: 4,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ["#E8A0BF", "#A8D5BA", "#F5D56E"]
+        });
+        confetti({
+            particleCount: 4,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ["#E8A0BF", "#A8D5BA", "#F5D56E"]
+        });
+        if (Date.now() < end) requestAnimationFrame(frame);
+    })();
+
+    // Scroller vers la finale
+    setTimeout(() => {
+        finale.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 500);
+}
+</script>
+
+</body>
+</html>
