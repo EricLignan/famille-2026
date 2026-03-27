@@ -115,7 +115,7 @@
         }
 
         .candle {
-            font-size: 1.4rem;
+            font-size: 1rem;
             filter: grayscale(1) opacity(0.3);
             transition: filter 0.4s ease, transform 0.4s ease;
         }
@@ -634,10 +634,12 @@ function openGift(gift, box) {
     }
 }
 
+const JEAN_AGE = 67; // ne en 1959
+
 function initCandles() {
     const container = document.getElementById("candles");
     container.innerHTML = "";
-    for (let i = 0; i < GIFTS.length; i++) {
+    for (let i = 0; i < JEAN_AGE; i++) {
         const c = document.createElement("span");
         c.className = "candle";
         c.textContent = "🕯️";
@@ -648,10 +650,15 @@ function initCandles() {
 function updateCounter() {
     document.getElementById("counter").textContent =
         `${openedCount} / ${GIFTS.length} surprises découvertes`;
-    // Allumer la bougie correspondante
+    // Allumer un lot de bougies proportionnel
     const candles = document.querySelectorAll(".candle");
-    if (candles[openedCount - 1]) {
-        candles[openedCount - 1].classList.add("lit");
+    const target = Math.round((openedCount / GIFTS.length) * JEAN_AGE);
+    let delay = 0;
+    for (let i = 0; i < target; i++) {
+        if (candles[i] && !candles[i].classList.contains("lit")) {
+            setTimeout(() => candles[i].classList.add("lit"), delay);
+            delay += 80;
+        }
     }
 }
 
