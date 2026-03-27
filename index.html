@@ -311,13 +311,21 @@
         /* === FINALE === */
         #finale {
             display: none;
-            min-height: 50vh;
+            min-height: 100vh;
             text-align: center;
             padding: 3rem 2rem;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(circle at 50% 40%, rgba(232, 160, 191, 0.2) 0%, transparent 60%),
+                radial-gradient(circle at 30% 70%, rgba(168, 213, 186, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(253, 235, 211, 0.3) 0%, transparent 50%),
+                var(--cream);
             animation: fadeIn 1s ease-out;
         }
 
-        #finale.active { display: block; }
+        #finale.active { display: flex; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -375,6 +383,8 @@
         .heart {
             font-size: 5rem;
             margin-top: 2rem;
+            color: #E8384F;
+            filter: drop-shadow(0 0 15px rgba(232, 56, 79, 0.4));
             animation: pulse 1.5s ease-in-out infinite;
         }
 
@@ -416,18 +426,20 @@
 
 <!-- GRILLE DE CADEAUX -->
 <section id="gifts-section">
-    <div class="counter" id="counter">0 / 11 surprises découvertes</div>
+    <div class="counter" id="counter">0 / 18 surprises découvertes</div>
     <div class="gifts-grid" id="gifts-grid"></div>
-    <div id="finale">
-        <div style="font-size:5rem;margin-bottom:1rem;">&#127874;</div>
-        <h2>Joyeux Anniversaire<br>Jean !</h2>
-        <div id="wishes-container"></div>
-        <p style="margin-top:2rem;">
-            On est là, on a besoin de toi,<br>
-            et on t'aime fort.
-        </p>
-        <div class="heart">&hearts;</div>
-    </div>
+</section>
+
+<!-- FINALE (page dediee plein ecran) -->
+<section id="finale">
+    <div style="font-size:5rem;margin-bottom:1rem;">&#127874;</div>
+    <h2>Joyeux Anniversaire<br>Jean !</h2>
+    <div id="wishes-container"></div>
+    <p style="margin-top:2rem;">
+        On est là, on a besoin de toi,<br>
+        et on t'aime fort.
+    </p>
+    <div class="heart">&#10084;&#65039;</div>
 </section>
 
 <!-- MODAL -->
@@ -457,16 +469,23 @@ const GIFTS_FALLBACK = [
     { id: 3,  name: "Elissa",        type: "audio", file: "assets/elissa.mp3",          image: "assets/elissa.jpeg" },
     { id: 4,  name: "Francine",      type: "audio", file: "assets/francine.mp3",        image: null },
     { id: 5,  name: "Cyril",         type: "audio", file: "assets/cyril.mp3",           image: null },
-    { id: 6,  name: "Eric",          type: "audio", file: "assets/eric.mp3",            image: null },
+    { id: 6,  name: "Eric E.",        type: "audio", file: "assets/eric.mp3",            image: null },
     { id: 7,  name: "Junior",        type: "audio", file: "assets/junior.mp3",          image: null },
     { id: 8,  name: "Blanche",       type: "audio", file: "assets/blanche.mp3",         image: null },
     { id: 9,  name: "Eug\u00e8ne",   type: "audio", file: "assets/eugene.mp3",          image: null },
     { id: 10, name: "Sondi et Tanti Fran\u00e7oise", type: "video", file: "assets/sondi-francoise.mp4", image: null },
     { id: 11, name: "Nadine et Tatiana",              type: "video", file: "assets/nadine-tatiana.mp4",  image: null },
+    { id: 12, name: "Eric M.",        type: "audio", file: "assets/eric-m.mp3",          image: null },
+    { id: 13, name: "Thierry",        type: "video", file: "assets/thierry.mp4",         image: null },
+    { id: 14, name: "Chantal",        type: "audio", file: "assets/chantal.mp3",         image: null },
+    { id: 15, name: "Francine N.T.",  type: "video", file: "assets/francine-nt.mp4",     image: null },
+    { id: 16, name: "Linda",          type: "video", file: "assets/linda.mp4",           image: null },
+    { id: 17, name: "Anne",           type: "audio", file: "assets/anne.mp3",            image: null },
+    { id: 18, name: "Anna",           type: "video", file: "assets/anna-ntcheng.mp4",   image: null },
 ];
 let GIFTS = [...GIFTS_FALLBACK];
 
-const ICONS = ["🎁", "🎀", "🎊", "🎉", "🎈", "🎂", "🎵", "💌", "🌟", "✨", "💛"];
+const ICONS = ["🎁", "🎀", "🎊", "🎉", "🎈", "🎂", "🎵", "💌", "🌟", "✨", "💛", "🎶", "🌺", "🎤", "💜", "🌸", "💝", "🌻"];
 let openedCount = 0;
 let currentAudio = null;
 const bgMusic = document.getElementById("bg-music");
@@ -505,7 +524,7 @@ function fadeInMusic(duration = 800) {
 // === CHARGEMENT GIFTS.JSON ===
 async function loadGifts() {
     try {
-        const response = await fetch('gifts.json');
+        const response = await fetch('gifts.json?v=' + Date.now());
         if (!response.ok) throw new Error(response.status);
         GIFTS = await response.json();
     } catch (e) {
