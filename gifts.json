@@ -16,5 +16,7 @@
     { "id": 15, "name": "Francine N.T.",     "type": "video", "file": "assets/francine-nt.mp4",     "image": null },
     { "id": 16, "name": "Linda",             "type": "video", "file": "assets/linda.mp4",           "image": null },
     { "id": 17, "name": "Anne",              "type": "audio", "file": "assets/anne.mp3",            "image": null },
-    { "id": 18, "name": "Anna",              "type": "video", "file": "assets/anna-ntcheng.mp4",    "image": null }
+    { "id": 18, "name": "Anna",              "type": "video", "file": "assets/anna-ntcheng.mp4",    "image": null },
+    { "id": 19, "name": "Chantal (2)",       "type": "audio", "file": "assets/chantal-2.mp3",       "image": null },
+    { "id": 20, "name": "Eugène (2)",        "type": "audio", "file": "assets/eugene-hs-1.mp3",     "image": null }
 ]
