@@ -647,6 +647,16 @@ function showModal(gift) {
         currentAudio = document.getElementById("current-audio");
     }
 
+    // Ecouter la fin du media si c'est le dernier cadeau
+    if (allOpened) {
+        const media = document.getElementById("current-audio");
+        if (media) {
+            media.addEventListener("ended", () => {
+                triggerFinale();
+            }, { once: true });
+        }
+    }
+
     modal.classList.add("active");
     // Fondu sortant de la musique de fond
     fadeOutMusic(800);
@@ -660,12 +670,11 @@ function closeModal(event) {
         currentAudio.pause();
         currentAudio = null;
     }
-    // Fondu entrant de la musique de fond
-    fadeInMusic(800);
-    // Finale apres fermeture du dernier cadeau
+    // Fondu entrant de la musique de fond (sauf si finale)
     if (allOpened) {
-        allOpened = false;
-        setTimeout(showFinale, 500);
+        triggerFinale();
+    } else {
+        fadeInMusic(800);
     }
 }
 
@@ -675,6 +684,33 @@ document.addEventListener("keydown", (e) => {
 });
 
 // === FINALE ===
+let finaleTriggered = false;
+
+function triggerFinale() {
+    if (finaleTriggered) return;
+    finaleTriggered = true;
+    allOpened = false;
+
+    // Fermer la modal
+    const modal = document.getElementById("modal");
+    modal.classList.remove("active");
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+    }
+
+    // Cacher la grille avec un fondu
+    const giftsSection = document.getElementById("gifts-section");
+    giftsSection.style.transition = "opacity 0.8s ease-out";
+    giftsSection.style.opacity = "0";
+
+    setTimeout(() => {
+        giftsSection.style.display = "none";
+        window.scrollTo(0, 0);
+        showFinale();
+    }, 800);
+}
+
 const WISHES = [
     "Bonheur", "Rires", "Voyages", "Fêtes",
     "Soleil", "Amour", "Joie", "Aventures",
@@ -686,10 +722,8 @@ function showFinale() {
     const finale = document.getElementById("finale");
     finale.classList.add("active");
 
-    // Scroller vers la finale
-    setTimeout(() => {
-        finale.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 300);
+    // Musique de fond pour la finale
+    fadeInMusic(800);
 
     // Feu d'artifice continu (8 secondes)
     const duration = 8000;
