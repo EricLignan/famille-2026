@@ -100,7 +100,35 @@
             font-family: 'Secular One', sans-serif;
             font-size: 1.1rem;
             color: var(--green);
-            margin-bottom: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .candles {
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .candle {
+            font-size: 1.4rem;
+            filter: grayscale(1) opacity(0.3);
+            transition: filter 0.4s ease, transform 0.4s ease;
+        }
+
+        .candle.lit {
+            filter: none;
+            animation: candleLit 0.5s ease-out;
+        }
+
+        @keyframes candleLit {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
         }
 
         .gifts-grid {
@@ -426,6 +454,7 @@
 
 <!-- GRILLE DE CADEAUX -->
 <section id="gifts-section">
+    <div class="candles" id="candles"></div>
     <div class="counter" id="counter">0 / 20 surprises découvertes</div>
     <div class="gifts-grid" id="gifts-grid"></div>
 </section>
@@ -547,6 +576,7 @@ async function startExperience() {
     document.getElementById("welcome").style.display = "none";
     document.getElementById("gifts-section").style.display = "block";
     renderGrid();
+    initCandles();
     // Demarrer la musique de fond (apres interaction utilisateur = autorise par les navigateurs)
     bgMusic.play().catch(() => {});
     // Petit confetti d'accueil
@@ -604,9 +634,25 @@ function openGift(gift, box) {
     }
 }
 
+function initCandles() {
+    const container = document.getElementById("candles");
+    container.innerHTML = "";
+    for (let i = 0; i < GIFTS.length; i++) {
+        const c = document.createElement("span");
+        c.className = "candle";
+        c.textContent = "🕯️";
+        container.appendChild(c);
+    }
+}
+
 function updateCounter() {
     document.getElementById("counter").textContent =
         `${openedCount} / ${GIFTS.length} surprises découvertes`;
+    // Allumer la bougie correspondante
+    const candles = document.querySelectorAll(".candle");
+    if (candles[openedCount - 1]) {
+        candles[openedCount - 1].classList.add("lit");
+    }
 }
 
 // === MODAL ===
