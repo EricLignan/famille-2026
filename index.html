@@ -250,7 +250,7 @@
             z-index: 100;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
+            padding: 1.5rem;
             backdrop-filter: blur(8px);
         }
 
@@ -263,9 +263,19 @@
             padding: 2rem;
             max-width: 420px;
             width: 100%;
+            max-height: 85dvh;
+            overflow-y: auto;
             text-align: center;
             position: relative;
             animation: modalIn 0.4s ease-out;
+        }
+
+        @media (max-width: 500px) {
+            .modal-overlay { padding: 1rem 0.75rem; }
+            .modal-content { padding: 1.2rem; max-height: 80dvh; }
+            .modal-name { font-size: 1.2rem; margin-bottom: 1rem; }
+            .modal-placeholder-avatar { width: 80px; height: 80px; font-size: 2rem; }
+            .modal-image { width: 80px; height: 80px; }
         }
 
         @keyframes modalIn {
@@ -274,16 +284,21 @@
         }
 
         .modal-close {
-            position: absolute;
-            top: 12px;
-            right: 16px;
-            background: none;
+            position: sticky;
+            top: 0;
+            float: right;
+            background: rgba(255,255,255,0.9);
             border: none;
             color: var(--text-light);
             font-size: 1.5rem;
             cursor: pointer;
-            opacity: 0.6;
+            opacity: 0.8;
             transition: opacity 0.2s;
+            z-index: 10;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            line-height: 36px;
         }
 
         .modal-close:hover { opacity: 1; }
@@ -332,6 +347,8 @@
         /* Video */
         .modal-video {
             width: 100%;
+            max-height: 50dvh;
+            object-fit: contain;
             border-radius: 12px;
             margin: 0.5rem 0;
         }
