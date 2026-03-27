@@ -679,8 +679,8 @@ function showModal(gift) {
     if (gift.image) {
         avatarEl.innerHTML = `<img class="modal-image" src="${gift.image}" alt="${gift.name}">`;
     } else {
-        const initials = gift.name.split(" ").map(w => w[0]).join("").substring(0, 2);
-        avatarEl.innerHTML = `<div class="modal-placeholder-avatar">${initials}</div>`;
+        const icon = gift.type === "video" ? "🎬" : "🎤";
+        avatarEl.innerHTML = `<div class="modal-placeholder-avatar">${icon}</div>`;
     }
 
     // Nom
@@ -785,8 +785,12 @@ function showFinale() {
     // Musique de fond pour la finale
     fadeInMusic(800);
 
-    // Ballons SVG 3D (balloons-js)
-    if (window.launchBalloons) window.launchBalloons();
+    // Ballons SVG 3D (balloons-js) — 3 vagues
+    if (window.launchBalloons) {
+        window.launchBalloons();
+        setTimeout(() => window.launchBalloons(), 2000);
+        setTimeout(() => window.launchBalloons(), 4500);
+    }
 
     // Feu d'artifice continu (8 secondes)
     const duration = 8000;
